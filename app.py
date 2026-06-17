@@ -87,12 +87,11 @@ if pilihan == "Kasus 1: Penilaian Mahasiswa":
     mu_tgh = segitiga(x_val, 40, 60, 80)
     mu_kanan = bahu_kanan(x_val, 60, 80)
 
-    # --- INPUT YANG SEDANG AKTIF (SEPERTI DI GAMBAR CONTOH) ---
+    # --- BAGIAN HASIL FUZZIFIKASI & TABEL KEANGGOTAAN ---
     st.divider()
+    st.markdown("### Hasil Fuzzifikasi")
     st.subheader(f"{x_val:.2f}") 
 
-    # --- TABEL DERAJAT KEANGGOTAAN ---
-    st.markdown("### Tabel Derajat Keanggotaan")
     df_1 = pd.DataFrame(
         [[f"{mu_kiri:.4f}"], [f"{mu_tgh:.4f}"], [f"{mu_kanan:.4f}"]],
         columns=["Derajat Keanggotaan"],
@@ -132,12 +131,11 @@ elif pilihan == "Kasus 2: Kelayakan Beasiswa":
     mu_tgh = segitiga(x_val, 1.5, 2.5, 3.5)
     mu_kanan = bahu_kanan(x_val, 2.5, 3.5)
 
-    # --- INPUT YANG SEDANG AKTIF (SEPERTI DI GAMBAR CONTOH) ---
+    # --- BAGIAN HASIL FUZZIFIKASI & TABEL KEANGGOTAAN ---
     st.divider()
+    st.markdown("### Hasil Fuzzifikasi")
     st.subheader(f"{x_val:.2f}")
 
-    # --- TABEL DERAJAT KEANGGOTAAN ---
-    st.markdown("### Tabel Derajat Keanggotaan")
     df_2 = pd.DataFrame(
         [[f"{mu_kiri:.4f}"], [f"{mu_tgh:.4f}"], [f"{mu_kanan:.4f}"]],
         columns=["Derajat Keanggotaan"],
@@ -177,12 +175,11 @@ elif pilihan == "Kasus 3: Tingkat Kemacetan":
     mu_tgh = segitiga(x_val, 300, 500, 700)
     mu_kanan = bahu_kanan(x_val, 500, 700)
 
-    # --- INPUT YANG SEDANG AKTIF (SEPERTI DI GAMBAR CONTOH) ---
+    # --- BAGIAN HASIL FUZZIFIKASI & TABEL KEANGGOTAAN ---
     st.divider()
+    st.markdown("### Hasil Fuzzifikasi")
     st.subheader(f"{x_val:.2f}")
 
-    # --- TABEL DERAJAT KEANGGOTAAN ---
-    st.markdown("### Tabel Derajat Keanggotaan")
     df_3 = pd.DataFrame(
         [[f"{mu_kiri:.4f}"], [f"{mu_tgh:.4f}"], [f"{mu_kanan:.4f}"]],
         columns=["Derajat Keanggotaan"],
