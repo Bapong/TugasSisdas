@@ -107,6 +107,158 @@ if pilihan == "Kasus 1: Penilaian Mahasiswa":
     mu_tgh = segitiga(x_val, 40, 60, 80)
     mu_kanan = bahu_kanan(x_val, 60, 80)
 
+    # --- LUARAN 3: PERHITUNGAN DERAJAT KEANGGOTAAN (TABEL) ---
+    st.header("3. Perhitungan Derajat Keanggotaan")
+    st.write(f"Tabel hasil kalkulasi nilai keanggotaan ($\mu$) dari input nilai **{x_val}**:")
+    
+    tabel_data = {
+        "Himpunan Fuzzy": ["Rendah", "Sedang", "Tinggi"],
+        "Derajat Keanggotaan (\u03BC)": [f"{mu_kiri:.2f}", f"{mu_tgh:.2f}", f"{mu_kanan:.2f}"]
+    }
+    st.table(tabel_data)
+    st.divider()
+
+    # --- LUARAN 4: GRAFIK HIMPUNAN FUZZY ---
+    st.header("4. Grafik Himpunan Fuzzy")
+    x_dom = np.linspace(0, 100, 500)
+    fig = plot_grafik(x_dom, [bahu_kiri(xi, 40, 60) for xi in x_dom], [segitiga(xi, 40, 60, 80) for xi in x_dom], [bahu_kanan(xi, 60, 80) for xi in x_dom],
+                      "Rendah", "Sedang", "Tinggi", x_val, mu_kiri, mu_tgh, mu_kanan, "Kurva Keanggotaan Nilai Ujian", "Nilai Ujian")
+    st.pyplot(fig)
+    st.divider()
+
+    # --- LUARAN 5: INTERPRETASI HASIL ---
+    st.header("5. Interpretasi Hasil")
+    tampilkan_interpretasi(x_val, mu_kiri, mu_tgh, mu_kanan, "Rendah", "Sedang", "Tinggi")
+
+# ==========================================
+# === KASUS 2: KELAYAKAN BEASISWA ===
+# ==========================================
+elif pilihan == "Kasus 2: Kelayakan Beasiswa":
+    st.title("🎓 Kasus 2: Sistem Kelayakan Beasiswa")
+    st.write("Sistem ini digunakan untuk memetakan Indeks Prestasi Kumulatif (IPK) ke dalam taraf kelayakan: Tidak Layak, Dipertimbangkan, atau Layak.")
+    st.divider()
+
+    # --- LUARAN 1: INTERFACE ---
+    st.header("1. Interface Streamlit")
+    x_val = st.slider("Geser untuk memasukkan nilai IPK mahasiswa (Domain: 0.00 - 4.00):", min_value=0.00, max_value=4.00, value=2.75, step=0.01)
+    st.divider()
+
+    # --- LUARAN 2: FUNGSI KEANGGOTAAN ---
+    st.header("2. Fungsi Keanggotaan")
+    st.write("Rumus matematis (Piecewise Function) yang digunakan untuk pemodelan kurva IPK:")
+    col_a, col_b, col_c = st.columns(3)
+    with col_a:
+        st.markdown("**Himpunan Tidak Layak (Bahu Kiri)**")
+        st.latex(r'''
+        \mu_{Tidak\ Layak}(x) = \begin{cases} 1, & x \le 1.5 \\ \frac{2.5 - x}{2.5 - 1.5}, & 1.5 < x < 2.5 \\ 0, & x \ge 2.5 \end{cases}
+        ''')
+    with col_b:
+        st.markdown("**Himpunan Dipertimbangkan (Segitiga)**")
+        st.latex(r'''
+        \mu_{Dipertimbangkan}(x) = \begin{cases} 0, & x \le 1.5 \text{ atau } x \ge 3.5 \\ \frac{x - 1.5}{2.5 - 1.5}, & 1.5 < x \le 2.5 \\ \frac{3.5 - x}{3.5 - 2.5}, & 2.5 < x < 3.5 \end{cases}
+        ''')
+    with col_c:
+        st.markdown("**Himpunan Layak (Bahu Kanan)**")
+        st.latex(r'''
+        \mu_{Layak}(x) = \begin{cases} 0, & x \le 2.5 \\ \frac{x - 2.5}{3.5 - 2.5}, & 2.5 < x < 3.5 \\ 1, & x \ge 3.5 \end{cases}
+        ''')
+    st.divider()
+
+    # Hitung nilai fuzzy di balik layar
+    mu_kiri = bahu_kiri(x_val, 1.5, 2.5)
+    mu_tgh = segitiga(x_val, 1.5, 2.5, 3.5)
+    mu_kanan = bahu_kanan(x_val, 2.5, 3.5)
+
+    # --- LUARAN 3: PERHITUNGAN DERAJAT KEANGGOTAAN (TABEL) ---
+    st.header("3. Perhitungan Derajat Keanggotaan")
+    st.write(f"Tabel hasil kalkulasi nilai keanggotaan ($\mu$) dari input IPK **{x_val}**:")
+    
+    tabel_data = {
+        "Himpunan Fuzzy": ["Tidak Layak", "Dipertimbangkan", "Layak"],
+        "Derajat Keanggotaan (\u03BC)": [f"{mu_kiri:.2f}", f"{mu_tgh:.2f}", f"{mu_kanan:.2f}"]
+    }
+    st.table(tabel_data)
+    st.divider()
+
+    # --- LUARAN 4: GRAFIK HIMPUNAN FUZZY ---
+    st.header("4. Grafik Himpunan Fuzzy")
+    x_dom = np.linspace(0, 4, 500)
+    fig = plot_grafik(x_dom, [bahu_kiri(xi, 1.5, 2.5) for xi in x_dom], [segitiga(xi, 1.5, 2.5, 3.5) for xi in x_dom], [bahu_kanan(xi, 2.5, 3.5) for xi in x_dom],
+                      "Tidak Layak", "Dipertimbangkan", "Layak", x_val, mu_kiri, mu_tgh, mu_kanan, "Kurva Keanggotaan Kelayakan IPK", "IPK")
+    st.pyplot(fig)
+    st.divider()
+
+    # --- LUARAN 5: INTERPRETASI HASIL ---
+    st.header("5. Interpretasi Hasil")
+    tampilkan_interpretasi(x_val, mu_kiri, mu_tgh, mu_kanan, "Tidak Layak", "Dipertimbangkan", "Layak")
+
+# ==========================================
+# === KASUS 3: TINGKAT KEMACETAN ===
+# ==========================================
+else:
+    st.title("🚗 Kasus 3: Sistem Kepadatan Lalu Lintas (Kemacetan)")
+    st.write("Sistem ini memodelkan kondisi jalan raya berdasarkan volume kendaraan ke dalam himpunan Fuzzy: Lancar, Padat, atau Macet.")
+    st.divider()
+
+    # --- LUARAN 1: INTERFACE ---
+    st.header("1. Interface Streamlit")
+    x_val = st.slider("Geser untuk memasukkan Jumlah Kendaraan di jalan (Domain: 0 - 1000):", min_value=0, max_value=1000, value=450)
+    st.divider()
+
+    # --- LUARAN 2: FUNGSI KEANGGOTAAN ---
+    st.header("2. Fungsi Keanggotaan")
+    st.write("Rumus matematis (Piecewise Function) yang digunakan untuk pemodelan kurva jumlah kendaraan:")
+    col_a, col_b, col_c = st.columns(3)
+    with col_a:
+        st.markdown("**Himpunan Lancar (Bahu Kiri)**")
+        st.latex(r'''
+        \mu_{Lancar}(x) = \begin{cases} 1, & x \le 300 \\ \frac{500 - x}{500 - 300}, & 300 < x < 500 \\ 0, & x \ge 500 \end{cases}
+        ''')
+    with col_b:
+        st.markdown("**Himpunan Padat (Segitiga)**")
+        st.latex(r'''
+        \mu_{Padat}(x) = \begin{cases} 0, & x \le 300 \text{ atau } x \ge 700 \\ \frac{x - 300}{500 - 300}, & 300 < x \le 500 \\ \frac{700 - x}{700 - 500}, & 500 < x < 700 \end{cases}
+        ''')
+    with col_c:
+        st.markdown("**Himpunan Macet (Bahu Kanan)**")
+        st.latex(r'''
+        \mu_{Macet}(x) = \begin{cases} 0, & x \le 500 \\ \frac{x - 500}{700 - 500}, & 500 < x < 700 \\ 1, & x \ge 700 \end{cases}
+        ''')
+    st.divider()
+
+    # Hitung nilai fuzzy di balik layar
+    mu_kiri = bahu_kiri(x_val, 300, 500)
+    mu_tgh = segitiga(x_val, 300, 500, 700)
+    mu_kanan = bahu_kanan(x_val, 500, 700)
+
+    # --- LUARAN 3: PERHITUNGAN DERAJAT KEANGGOTAAN (TABEL) ---
+    st.header("3. Perhitungan Derajat Keanggotaan")
+    st.write(f"Tabel hasil kalkulasi nilai keanggotaan ($\mu$) dari volume kendaraan **{x_val}**:")
+    
+    tabel_data = {
+        "Himpunan Fuzzy": ["Lancar", "Padat", "Macet"],
+        "Derajat Keanggotaan (\u03BC)": [f"{mu_kiri:.2f}", f"{mu_tgh:.2f}", f"{mu_kanan:.2f}"]
+    }
+    st.table(tabel_data)
+    st.divider()
+
+    # --- LUARAN 4: GRAFIK HIMPUNAN FUZZY ---
+    st.header("4. Grafik Himpunan Fuzzy")
+    x_dom = np.linspace(0, 1000, 500)
+    fig = plot_grafik(x_dom, [bahu_kiri(xi, 300, 500) for xi in x_dom], [segitiga(xi, 300, 500, 700) for xi in x_dom], [bahu_kanan(xi, 500, 700) for xi in x_dom],
+                      "Lancar", "Padat", "Macet", x_val, mu_kiri, mu_tgh, mu_kanan, "Kurva Keanggotaan Jumlah Kendaraan", "Jumlah Kendaraan")
+    st.pyplot(fig)
+    st.divider()
+
+    # --- LUARAN 5: INTERPRETASI HASIL ---
+    st.header("5. Interpretasi Hasil")
+    tampilkan_interpretasi(x_val, mu_kiri, mu_tgh, mu_kanan, "Lancar", "Padat", "Macet", satuan=" kendaraan")
+
+    # Hitung nilai fuzzy di balik layar
+    mu_kiri = bahu_kiri(x_val, 40, 60)
+    mu_tgh = segitiga(x_val, 40, 60, 80)
+    mu_kanan = bahu_kanan(x_val, 60, 80)
+
     # --- LUARAN 3: PERHITUNGAN DERAJAT KEANGGOTAAN ---
     st.header("3. Perhitungan Derajat Keanggotaan")
     st.write(f"Hasil nilai matematis ($\mu$) kalkulasi Fuzzifikasi dari input nilai **{x_val}**:")
